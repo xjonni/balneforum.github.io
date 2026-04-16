@@ -1,20 +1,455 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>BalneForum</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balneário RP - Fórum Oficial</title>
     <style>
-        body { font-family: Arial; max-width: 800px; margin: auto; padding: 20px; background: #f0f0f0; }
-        .card { background: white; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        button { background: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0b3b5f 0%, #1b5a7a 100%);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Cabeçalho */
+        .header {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid #ffcc00;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: #ffcc00;
+            color: #1b5a7a;
+        }
+
+        /* Seções */
+        .section {
+            display: none;
+            padding: 40px 0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .card h2 {
+            color: #ffcc00;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffcc00;
+            padding-left: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ffcc00;
+            color: #1b5a7a;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #ffdd44;
+            transform: scale(1.02);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.9);
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Grid do fórum */
+        .forum-category {
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .category-title {
+            background: #ffcc00;
+            color: #1b5a7a;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-list li {
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .topic-title a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .topic-title a:hover {
+            color: #ffcc00;
+        }
+
+        .topic-meta {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .footer {
+            background: rgba(0,0,0,0.8);
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .logo-area {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .nav {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>🍄 BalneForum</h1>
-    <div class="card">
-        <h2>📌 Denúncias e Suporte</h2>
-        <p>Clique no botão abaixo para abrir uma denúncia de hacker, bug ou apelação.</p>
-        <button onclick="window.open('https://github.com/balneforum/balneforum.github.io/issues')">Abrir Denúncia</button>
+
+<div class="header">
+    <div class="container logo-area">
+        <div class="logo">
+            <h1>🏖️ Balneário RP</h1>
+            <p>Fórum oficial da comunidade - Roblox</p>
+        </div>
+        <div class="nav">
+            <a href="#" data-section="home" class="nav-link active">Início</a>
+            <a href="#" data-section="denuncias" class="nav-link">Denúncias</a>
+            <a href="#" data-section="bugs" class="nav-link">Reportar Bug</a>
+            <a href="#" data-section="apelacoes" class="nav-link">Apelações</a>
+            <a href="#" data-section="forum" class="nav-link">Fórum</a>
+        </div>
     </div>
+</div>
+
+<div class="container">
+    <!-- Seção Início -->
+    <div id="home" class="section active">
+        <div class="card">
+            <h2>🌊 Bem-vindo ao Fórum do Balneário RP</h2>
+            <p>Este é o canal oficial para denúncias, reporte de bugs, apelações e discussões sobre o nosso servidor no Roblox. Utilize as abas acima para navegar.</p>
+            <p><strong>Regras básicas:</strong> Respeito acima de tudo. Provas são obrigatórias em denúncias. Falsas denúncias resultarão em punição.</p>
+            <a href="#" class="btn" data-section="denuncias">Fazer uma Denúncia →</a>
+        </div>
+        <div class="card">
+            <h2>📢 Últimas atualizações</h2>
+            <ul style="margin-left: 20px;">
+                <li>🎉 Sistema de fórum online!</li>
+                <li>🐞 Corrigido bug do carro flutuante.</li>
+                <li>⚖️ Nova equipe de moderação.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>🎮 Como jogar</h2>
+            <p>Entre no Roblox e procure por "Balneário RP". Participe da nossa comunidade!</p>
+            <a href="#" class="btn" style="background:#5865F2; color:white;">Discord Oficial</a>
+            <a href="#" class="btn" style="background:#00B0F0;">Grupo Roblox</a>
+        </div>
+    </div>
+
+    <!-- Seção Denúncias -->
+    <div id="denuncias" class="section">
+        <div class="card">
+            <h2>🚨 Denúncia de Jogadores</h2>
+            <p>Use o formulário abaixo para denunciar jogadores que estejam quebrando as regras (hacks, xingamentos, abuso de bugs, etc.). <strong>Você precisa ter uma conta no GitHub para enviar.</strong></p>
+            <form id="denunciaForm">
+                <div class="form-group">
+                    <label>Seu nick no Roblox *</label>
+                    <input type="text" id="denuncia_nick" required>
+                </div>
+                <div class="form-group">
+                    <label>Nick do jogador denunciado *</label>
+                    <input type="text" id="denuncia_alvo" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de violação *</label>
+                    <select id="denuncia_tipo">
+                        <option value="Hacker (speed, fly, kill aura)">Hacker (speed, fly, kill aura)</option>
+                        <option value="Desrespeito / Toxidade">Desrespeito / Toxidade</option>
+                        <option value="Abuso de bugs">Abuso de bugs</option>
+                        <option value="Fake RP / Metagaming">Fake RP / Metagaming</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Provas (links de vídeo ou print) *</label>
+                    <textarea id="denuncia_provas" placeholder="Cole aqui links do Imgur, YouTube, etc." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Descrição detalhada</label>
+                    <textarea id="denuncia_desc" placeholder="O que aconteceu? Quando? Onde no mapa?"></textarea>
+                </div>
+                <button type="button" class="btn" onclick="submitDenuncia()">Enviar Denúncia</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seção Report de Bugs -->
+    <div id="bugs" class="section">
+        <div class="card">
+            <h2>🐞 Reportar Bug/Glitch</h2>
+            <p>Encontrou algum problema no jogo? Relate aqui para que possamos corrigir.</p>
+            <form id="bugForm">
+                <div class="form-group">
+                    <label>Seu nick *</label>
+                    <input type="text" id="bug_nick" required>
+                </div>
+                <div class="form-group">
+                    <label>Descrição do bug *</label>
+                    <textarea id="bug_desc" placeholder="O que aconteceu? Como reproduzir?" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Passos para reproduzir</label>
+                    <textarea id="bug_passos" placeholder="1. Faça isso... 2. Depois aquilo..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Vídeo ou screenshot (link)</label>
+                    <input type="text" id="bug_midia" placeholder="https://imgur.com/...">
+                </div>
+                <button type="button" class="btn" onclick="submitBug()">Enviar Bug Report</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seção Apelações -->
+    <div id="apelacoes" class="section">
+        <div class="card">
+            <h2>⚖️ Apelação de Punição</h2>
+            <p>Se você foi punido (ban, mute, kick) e acredita que foi injustiçado, apele aqui.</p>
+            <form id="apelacaoForm">
+                <div class="form-group">
+                    <label>Seu nick *</label>
+                    <input type="text" id="apelacao_nick" required>
+                </div>
+                <div class="form-group">
+                    <label>Qual foi a punição? *</label>
+                    <input type="text" id="apelacao_punicao" placeholder="Ex: Banimento por 7 dias" required>
+                </div>
+                <div class="form-group">
+                    <label>Motivo da apelação *</label>
+                    <textarea id="apelacao_motivo" placeholder="Explique por que você acha que a punição foi injusta ou exagerada." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Provas (opcional)</label>
+                    <input type="text" id="apelacao_provas" placeholder="Links de prints ou vídeos">
+                </div>
+                <button type="button" class="btn" onclick="submitApelacao()">Enviar Apelação</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seção Fórum -->
+    <div id="forum" class="section">
+        <div class="card">
+            <h2>📋 Fórum da Comunidade</h2>
+            <p>Participe das discussões. Para criar um novo tópico, clique no botão e use o GitHub Issues.</p>
+            <a href="https://github.com/xjonni/balneario-rp-forum/issues/new/choose" class="btn" target="_blank">+ Novo Tópico</a>
+        </div>
+
+        <div class="forum-category">
+            <div class="category-title">📢 Anúncios e Regras</div>
+            <ul class="topic-list">
+                <li><span class="topic-title"><a href="#">📌 Regras do Servidor - Leia antes de jogar</a></span><span class="topic-meta">Staff, ontem</span></li>
+                <li><span class="topic-title"><a href="#">🎉 Evento de Verão - Recompensas em dobro</a></span><span class="topic-meta">Admin, 3 dias atrás</span></li>
+            </ul>
+        </div>
+
+        <div class="forum-category">
+            <div class="category-title">💬 Discussões Gerais</div>
+            <ul class="topic-list">
+                <li><span class="topic-title"><a href="#">🚗 Qual o melhor carro do servidor?</a></span><span class="topic-meta">Player123, 2 horas atrás</span></li>
+                <li><span class="topic-title"><a href="#">🏠 Ideias para novas profissões</a></span><span class="topic-meta">Construtor, ontem</span></li>
+            </ul>
+        </div>
+
+        <div class="forum-category">
+            <div class="category-title">🐞 Bugs Conhecidos</div>
+            <ul class="topic-list">
+                <li><span class="topic-title"><a href="#">🐛 Loja de roupas não abre - FIX em breve</a></span><span class="topic-meta">Dev, 5 horas atrás</span></li>
+                <li><span class="topic-title"><a href="#">⚡ Lag no bairro das palmeiras</a></span><span class="topic-meta">Comunidade, ontem</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Balneário RP - Fórum Oficial | Desenvolvido para a comunidade Roblox</p>
+    <p>🚨 Denúncias são analisadas pela staff em até 48h. Não esqueça de incluir provas!</p>
+</div>
+
+<script>
+    // Navegação entre seções
+    const links = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section');
+
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('data-section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            window.scrollTo(0, 0);
+        });
+    });
+
+    // Funções de submissão - todas abrem uma Issue no GitHub
+    function submitDenuncia() {
+        const nick = document.getElementById('denuncia_nick').value;
+        const alvo = document.getElementById('denuncia_alvo').value;
+        const tipo = document.getElementById('denuncia_tipo').value;
+        const provas = document.getElementById('denuncia_provas').value;
+        const desc = document.getElementById('denuncia_desc').value;
+        if(!nick || !alvo || !provas) {
+            alert('Preencha todos os campos obrigatórios (*)');
+            return;
+        }
+        const title = `[DENÚNCIA] ${alvo} - ${tipo}`;
+        const body = `**Denunciante:** ${nick}\n**Denunciado:** ${alvo}\n**Tipo:** ${tipo}\n**Provas:** ${provas}\n**Descrição:** ${desc}\n\n**Comportamento:** Violação das regras do servidor.`;
+        const url = `https://github.com/xjonni/balneario-rp-forum/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=denúncia`;
+        window.open(url, '_blank');
+    }
+
+    function submitBug() {
+        const nick = document.getElementById('bug_nick').value;
+        const desc = document.getElementById('bug_desc').value;
+        const passos = document.getElementById('bug_passos').value;
+        const midia = document.getElementById('bug_midia').value;
+        if(!nick || !desc) {
+            alert('Preencha seu nick e a descrição do bug.');
+            return;
+        }
+        const title = `[BUG] ${desc.substring(0, 60)}`;
+        const body = `**Reportado por:** ${nick}\n**Descrição:** ${desc}\n**Passos para reproduzir:** ${passos}\n**Mídia:** ${midia}`;
+        const url = `https://github.com/xjonni/balneario-rp-forum/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=bug`;
+        window.open(url, '_blank');
+    }
+
+    function submitApelacao() {
+        const nick = document.getElementById('apelacao_nick').value;
+        const punicao = document.getElementById('apelacao_punicao').value;
+        const motivo = document.getElementById('apelacao_motivo').value;
+        const provas = document.getElementById('apelacao_provas').value;
+        if(!nick || !punicao || !motivo) {
+            alert('Preencha nick, punição e motivo da apelação.');
+            return;
+        }
+        const title = `[APELAÇÃO] ${nick} - ${punicao}`;
+        const body = `**Nick:** ${nick}\n**Punição:** ${punicao}\n**Motivo da apelação:** ${motivo}\n**Provas:** ${provas}\n\nPeço revisão da minha punição.`;
+        const url = `https://github.com/xjonni/balneario-rp-forum/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=apelação`;
+        window.open(url, '_blank');
+    }
+</script>
 </body>
 </html>
